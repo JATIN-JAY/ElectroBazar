@@ -1,0 +1,129 @@
+import express from 'express';
+import Product from '../models/Product.js';
+import { v2 as cloudinary } from 'cloudinary';
+import { verifyToken, checkAdmin } from '../middleware/auth.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const router = express.Router();
+
+// Get featured products only - MUST be before /:id route
+router.get('/featured/list', async (req, res) => {
+  try {
+    const products = await Product.find({ featured: true });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get all products
+router.get('/', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get single product
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Create product (admin only)
+router.post('/', verifyToken, checkAdmin, async (req, res) => {
+  try {
+    const { name, price, category, brand, description, imageUrl, featured } = req.body;
+
+    // Validate required fields
+    if (!name || !price || !category || !brand || !description || !imageUrl) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Create new product
+    const product = new Product({
+      name,
+      price: parseFloat(price),
+      category,
+      brand,
+      description,
+      image: imageUrl,
+      featured: featured ?? false,
+    });
+
+    await product.save();
+
+    res.status(201).json({
+      message: 'Product created successfully',
+      product,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Delete product (admin only)
+router.delete('/:id', verifyToken, checkAdmin, async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update product (admin only)
+router.put('/:id', verifyToken, checkAdmin, async (req, res) => {
+  try {
+    const { name, price, category, brand, description, imageUrl, featured } = req.body;
+
+    // Build update object dynamically with provided fields
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (price !== undefined) updateData.price = parseFloat(price);
+    if (category !== undefined) updateData.category = category;
+    if (brand !== undefined) updateData.brand = brand;
+    if (description !== undefined) updateData.description = description;
+    if (imageUrl !== undefined) updateData.image = imageUrl;
+    if (featured !== undefined) updateData.featured = featured;
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json({ message: 'Product updated successfully', product });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+export default router;
