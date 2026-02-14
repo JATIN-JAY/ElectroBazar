@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { GoogleLogin } from '@react-oauth/google';
 import { CartContext } from '../context/CartContext';
 
 export default function RegisterPage() {
@@ -17,30 +16,7 @@ export default function RegisterPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setError('');
-    setLoading(true);
 
-    try {
-      const response = await api.post('/auth/google-register', {
-        token: credentialResponse.credential
-      });
-      const userData = {
-        ...response.data.user,
-        token: response.data.token,
-      };
-      loginUser(userData);
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Google registration failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleError = () => {
-    setError('Google registration failed. Please try again.');
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,24 +128,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <div className="relative py-2">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or sign up with</span>
-            </div>
-          </div>
 
-          <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              useOneTap
-              theme="outline"
-              size="large"
-            />
-          </div>
 
           <p className="text-center text-gray-600">
             Already have an account?{' '}
