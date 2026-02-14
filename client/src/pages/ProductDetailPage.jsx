@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { CartContext } from '../context/CartContext';
 
 export default function ProductDetailPage() {
@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/products/${id}`);
+      const response = await api.get(`/products/${id}`);
       setProduct(response.data);
     } catch (err) {
       setError(err.message || 'Failed to load product');

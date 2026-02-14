@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { GoogleLogin } from '@react-oauth/google';
 import { CartContext } from '../context/CartContext';
 
@@ -22,7 +22,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/google-login', {
+      const response = await api.post('/auth/google-login', {
         token: credentialResponse.credential
       });
       const userData = {
@@ -48,7 +48,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/login', formData);
+      const response = await api.post('/auth/login', formData);
       const userData = {
         ...response.data.user,
         token: response.data.token,

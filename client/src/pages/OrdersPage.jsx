@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { CartContext } from '../context/CartContext';
 
 export default function OrdersPage() {
@@ -18,7 +18,7 @@ export default function OrdersPage() {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const res = await axios.get('/api/orders', {
+        const res = await api.get('/orders', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data || []);

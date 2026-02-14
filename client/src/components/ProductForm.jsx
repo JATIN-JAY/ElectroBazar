@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import api from '../api';
 
 const ProductForm = ({ onProductCreated, categories }) => {
   const [formData, setFormData] = useState({
@@ -104,8 +105,8 @@ const ProductForm = ({ onProductCreated, categories }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        '/api/products',
+      const response = await api.post(
+        '/products',
         formData,
         {
           headers: {

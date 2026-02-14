@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 
 export default function SearchOverlay({ open, onClose }) {
   const [visible, setVisible] = useState(false);
@@ -143,7 +143,7 @@ function useProductSearch(query, open, productsCache, setResults, setLoadingResu
     async function ensureProducts() {
       if (!productsCache.current) {
         try {
-          const res = await axios.get('/api/products');
+          const res = await api.get('/products');
           productsCache.current = res.data || [];
         } catch (err) {
           productsCache.current = [];

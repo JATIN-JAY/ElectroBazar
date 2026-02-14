@@ -121,7 +121,7 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { motion } from 'framer-motion';
 import { CartContext } from '../context/CartContext';
 
@@ -249,7 +249,7 @@ export function ProductGrid() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/products');
+      const response = await api.get('/products');
       setProducts(response.data);
     } catch (error) {
       setError(error.message);

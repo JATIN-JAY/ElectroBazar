@@ -172,7 +172,7 @@
 
 import React, { useRef, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from '../api';
 import { motion } from "framer-motion";
 import { CartContext } from "../context/CartContext";
 import { Spotlight } from "../context/Spotlight";
@@ -196,7 +196,7 @@ export default function HeroSection() {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await axios.get('/api/products/featured/list');
+        const response = await api.get('/products/featured/list');
         const products = response.data.map(product => ({
           name: product.name,
           desc: product.description,

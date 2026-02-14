@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { CartContext } from '../context/CartContext';
 
 function ProductCard({ product }) {
@@ -127,7 +127,7 @@ export default function CategoryPage() {
   const fetchProductsByCategory = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/products');
+      const response = await api.get('/products');
       let filtered = response.data.filter(
         (product) => product.category === category
       );

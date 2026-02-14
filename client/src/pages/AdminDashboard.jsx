@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { CartContext } from '../context/CartContext';
 import ProductForm from '../components/ProductForm';
 
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/products');
+      const response = await api.get('/products');
       setProducts(response.data);
       setError('');
     } catch (err) {
@@ -44,8 +44,8 @@ const AdminDashboard = () => {
 
   const handleToggleFeatured = async (productId, currentFeaturedStatus) => {
     try {
-      const response = await axios.put(
-        `/api/products/${productId}`,
+      const response = await api.put(
+        `/products/${productId}`,
         { featured: !currentFeaturedStatus },
         {
           headers: {
@@ -71,7 +71,7 @@ const AdminDashboard = () => {
 
     try {
       setDeleteLoading(productId);
-      await axios.delete(`/api/products/${productId}`, {
+      await api.delete(`/products/${productId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const RazorpayCheckout = ({ cartItems, totalPrice, shippingInfo, user, onSuccess, onError }) => {
   const [loading, setLoading] = useState(false);
@@ -21,8 +21,8 @@ const RazorpayCheckout = ({ cartItems, totalPrice, shippingInfo, user, onSuccess
       const token = localStorage.getItem('token');
 
       // Step 1: Create order in Razorpay
-      const orderResponse = await axios.post(
-        '/api/payment/create-order',
+      const orderResponse = await api.post(
+        '/payment/create-order',
         {
           amount: totalPrice,
           items: cartItems,
@@ -67,8 +67,8 @@ const RazorpayCheckout = ({ cartItems, totalPrice, shippingInfo, user, onSuccess
       handler: async (response) => {
         // Step 3: Verify payment
         try {
-          const verifyResponse = await axios.post(
-            '/api/payment/verify-payment',
+          const verifyResponse = await api.post(
+            '/payment/verify-payment',
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
