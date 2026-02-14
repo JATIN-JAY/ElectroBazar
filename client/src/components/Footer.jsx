@@ -8,11 +8,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold">S</span>
               </div>
               <div>
-                <div className="text-lg font-semibold text-gray-900">ShopHub</div>
+                <div className="text-lg font-semibold text-gray-900">ElectroBazar</div>
                 <p className="text-sm text-gray-500">Premium gadgets, thoughtful design.</p>
               </div>
             </div>
@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-8 border-t border-gray-100 text-sm text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} ShopHub, Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ElectroBazar, Inc. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <a href="#" className="hover:text-gray-700">Terms</a>
             <a href="#" className="hover:text-gray-700">Privacy</a>
